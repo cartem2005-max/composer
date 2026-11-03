@@ -104,6 +104,7 @@ test.describe('Подбор: метафора (ИИ с подменой) и за
   test('ИИ вернул больше допустимого: не больше 5 объектов и 3 главных, без повторов', async ({ app: page, ctx }) => {
     await ctx.mockPick(json({ picks: OBJECTS.map(o => ({ id: o.id, variant: 'main' })).concat([{ id: 'book', variant: 'bg' }]), reason: 'всё' }));
     await metaphor(page, 'всё и сразу');
+    await expect(page.locator('#notice')).toContainText('Подобрал ИИ');
     const list = await items(page);
     expect(list).toHaveLength(5);
     expect(list.filter(i => i.variant === 'main')).toHaveLength(3);

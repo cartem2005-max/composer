@@ -41,10 +41,11 @@ test.describe('Сохранение и перезагрузка', () => {
     const noUid = (t: string) => t.replace(/ data-uid="\d+"/g, '');
     expect(noUid((await exportSvg(page)).text)).toBe(noUid(beforeSvg));
     // история пуста: отмена и возврат ничего не меняют
-    await page.locator('#btn-undo').click();
+    await expect(page.locator('#btn-undo')).toBeDisabled();
+    await expect(page.locator('#btn-redo')).toBeDisabled();
     await page.keyboard.press('Control+z');
     expect((await items(page)).map(i => i.transform)).toEqual(beforeItems.map(i => i.transform));
-    await page.locator('#btn-redo').click();
+    await page.keyboard.press('Control+Shift+z');
     expect((await items(page)).map(i => i.transform)).toEqual(beforeItems.map(i => i.transform));
     // оттенок сохранён
     const rotated = (await items(page)).find(i => i.id === main.id)!;

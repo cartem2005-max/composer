@@ -1,7 +1,7 @@
 import {
   test, expect, items, ids, selectedId, selectionCount, clearAll, addObject, addById, panelBtn, clickItem, dragItem,
   clickEmptyCanvas, exportSvg, validateExport, SCHEMES, OBJECTS, NAME_BY_ID, FORMAT_SIZE, noticeText, expectNoErrors,
-  setScheme, schemeByName, savedComposition, submitNames,
+  setScheme, schemeByName, savedComposition, submitNames, toneInfo,
 } from './helpers';
 
 test.describe('Объекты на холсте', () => {
@@ -41,9 +41,9 @@ test.describe('Объекты на холсте', () => {
     expect(html).toBeTruthy();
     await clickItem(page, a1.uid);
     expect(await selectedId(page)).toBe('book-main-1');
-    await expect(panelBtn(page, 'tone')).toContainText('(1/6)');
+    expect((await toneInfo(page))!.n).toBe(1);
     await clickItem(page, b1.uid);
-    await expect(panelBtn(page, 'tone')).toContainText('(2/6)');
+    expect((await toneInfo(page))!.n).toBe(2);
     const { text } = await exportSvg(page);
     const r = await validateExport(page, text, { count: 2 });
     expect(r.groupIds).toEqual(['book-main-1', 'book-main-2']);
@@ -141,6 +141,7 @@ test.describe('Объекты на холсте', () => {
       await expect(page.locator('#object-panel')).toContainText(`Поворот: ${deg}°`);
     }
     await page.locator('#object-panel [data-a=rot]').fill('350');
+    await page.locator('#object-panel [data-a=rot]').blur(); // ползунок держит фокус — горячие клавиши в полях ввода не действуют
     await page.keyboard.press('r'); await page.keyboard.press('r');
     expect(await rot()).toBe(20);
     await expect(page.locator('#object-panel')).toContainText('Поворот: 20°');
@@ -325,16 +326,18 @@ test.describe('Объекты на холсте', () => {
       const bgColors = new Set([...bgHtml.matchAll(/#[0-9A-Fa-f]{6}/g)].map(m => m[0].toUpperCase()));
       const allowedBg = new Set([scheme.bg1, scheme.bg2, scheme.bg3].map(c => c.toUpperCase()));
       for (const c of bgColors) expect(allowedBg.has(c), `${o.id} bg цвет ${c}`).toBeTruthy();
-      await expect(panelBtn(page, 'tone')).toContainText('(1/2)');
+      const bgTone = await toneInfo(page); // кнопка скрыта, если у фонового вида один оттенок
+      if (bgTone) expect(bgTone.n).toBe(1);
       await panelBtn(page, 'variant').click();
       const again = (await items(page))[0];
       expect(again.id).toBe(`${o.id}-main-1`);
       expect(await page.locator('#canvas svg [data-uid]').innerHTML()).toBe(mainHtml);
-      await expect(panelBtn(page, 'tone')).toContainText('(1/6)');
+      const mainTone = await toneInfo(page);
+      if (mainTone) expect(mainTone.n).toBe(1); // при переключении оттенок сбрасывается на 1/N
     }
   });
 
-  test('u013 оттенки главного объекта: круг 1/6…6/6, только цвета схемы', async ({ app: page }) => {
+  test('u013 оттенки главного объекта: круг 1/N…N/N, N — только различимые, только цвета схемы', async ({ app: page }) => {
     for (const [name, id] of [['Фиолетовая', 'violet'], ['Персиковая', 'peach'], ['Бирюзовая', 'teal']] as const) {
       await clearAll(page);
       await setScheme(page, name);
@@ -342,16 +345,21 @@ test.describe('Объекты на холсте', () => {
         await clearAll(page);
         await addObject(page, obj);
         const allowed = new Set(Object.values(SCHEMES[id]).filter(v => v.startsWith('#')).map(c => c.toUpperCase()));
+        // N берём из счётчика кнопки (только различимые оттенки); кнопки нет — оттенок один
+        const info = await toneInfo(page);
+        const total = info?.total ?? 1;
+        expect(total).toBeGreaterThanOrEqual(1);
+        expect(total).toBeLessThanOrEqual(6);
         const seen = new Set<string>();
-        for (let n = 1; n <= 6; n++) {
-          await expect(panelBtn(page, 'tone')).toContainText(`(${n}/6)`);
+        for (let n = 1; n <= total; n++) {
+          if (info) expect((await toneInfo(page))!.n).toBe(n);
           const html = await page.locator('#canvas svg [data-uid]').innerHTML();
           seen.add(html);
           for (const m of html.matchAll(/#[0-9A-Fa-f]{6}/g)) expect(allowed.has(m[0].toUpperCase()), `${id}/${obj}: ${m[0]}`).toBeTruthy();
-          await panelBtn(page, 'tone').click();
+          if (info) await panelBtn(page, 'tone').click();
         }
-        await expect(panelBtn(page, 'tone')).toContainText('(1/6)');
-        expect(seen.size).toBeGreaterThan(1);
+        if (info) expect((await toneInfo(page))!.n).toBe(1);
+        expect(seen.size, `${id}/${obj}: все ${total} оттенков визуально разные`).toBe(total);
       }
     }
   });

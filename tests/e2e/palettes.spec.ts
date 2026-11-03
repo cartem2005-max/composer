@@ -194,7 +194,7 @@ test.describe('Палитры', () => {
     await applyPalette(page, JSON.stringify({ name, bg: ['#EEEEEE', '#CCCCCC', '#AAAAAA'], obj: ['#FF0000', '#00FF00', '#0000FF'] }));
     await expect(activeScheme(page)).toContainText('Тест / : * ? " < > | 🎨 --x &');
     const first = await exportSvg(page);
-    expect(first.filename).toMatch(/^illustration-og-custom-[0-9a-f]{1,24}\.svg$/);
+    expect(first.filename).toMatch(/^illustration-og-custom-[0-9a-f]{24,64}\.svg$/);
     const second = await exportSvg(page);
     expect(second.text).toBe(first.text);
     const r = await analyzeSvg(page, first.text);

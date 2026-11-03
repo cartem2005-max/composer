@@ -14,3 +14,4 @@ tests/report-ai*.md
 !tests/report-ai-final.md
 tests/report-ai-prev.md
 tests/review
+DESIGN-NOTES.md

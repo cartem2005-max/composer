@@ -309,3 +309,11 @@ export function mulberry32(seed: number) {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
+
+/** Счётчик кнопки «Другие цвета (n/N)». null — кнопки нет (у объекта один оттенок, кнопка скрыта). */
+export async function toneInfo(page: Page): Promise<{ n: number; total: number } | null> {
+  const b = page.locator('#object-panel [data-a=tone]');
+  if ((await b.count()) === 0) return null;
+  const m = /\((\d+)\/(\d+)\)/.exec((await b.first().textContent()) ?? '');
+  return m ? { n: Number(m[1]), total: Number(m[2]) } : null;
+}

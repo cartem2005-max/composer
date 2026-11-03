@@ -1,7 +1,7 @@
 import {
   test, expect, items, ids, exportSvg, validateExport, SCHEMES, FORMAT_SIZE, FORMAT_LABEL, LAYOUT_LABEL, submitNames,
   setFormat, setLayout, pressedLabels, noticeText, segBtn, expectNoErrors, panelBtn, clickItem, dragItem, selectedId,
-  type FormatId, type LayoutId,
+  toneInfo, type FormatId, type LayoutId,
 } from './helpers';
 
 /** Охват всех элементов <g data-uid> в координатах кадра (единицы viewBox). */
@@ -109,7 +109,7 @@ test.describe('Форматы и раскладки', () => {
     expect(after.x).not.toBeCloseTo(manual.x, 0);
     // оттенок: у книги выбран второй
     await clickItem(page, after.uid);
-    await expect(panelBtn(page, 'tone')).toContainText('(2/6)');
+    expect((await toneInfo(page))!.n).toBe(2);
   });
 
   test('u055 отмена смены формата и раскладки: один клик — один шаг, сегменты совпадают с холстом', async ({ app: page }) => {

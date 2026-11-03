@@ -30,8 +30,8 @@ function initialComposition(): Composition {
     }
   } catch { /* повреждённое сохранение — начинаем с примера */ }
   const base: Composition = { format: 'og', layout: 'compact', size: 'L', schemeId: 'violet', background: 'bg1', scale: 1, items: [] };
-  setTimeout(() => notify('Введите заголовок статьи — ИИ подберёт объекты. Или перечислите их сами, или добавьте из библиотеки слева.'), 0);
-  return applyPicks({ ...base, format: 'square', layout: 'offset' }, pickByNames('наушники, фоновые тюльпаны').picks);
+  setTimeout(() => notify('Введите заголовок статьи — ИИ подберёт объекты. Или перечислите их сами, или добавьте из библиотеки слева.', 'hint'), 0);
+  return applyPicks(base, pickByNames('наушники, фоновые тюльпаны').picks);
 }
 
 /** tones — цвета объектов по ключу «объект:вид»: раскладка меняет порядок слоёв, поэтому сопоставляем не по номеру. */
@@ -294,7 +294,7 @@ function renderLibrary() {
 
 // ---------- Подбор ----------
 
-function notify(text: string, kind: 'info' | 'error' = 'info') {
+function notify(text: string, kind: 'info' | 'error' | 'hint' = 'info') {
   const n = $('notice');
   n.textContent = text;
   n.dataset.kind = kind;
@@ -468,6 +468,9 @@ function escapeHtml(s: string) {
 
 let lastScheme = '';
 store.subscribe(() => {
+  // Стартовая подсказка уходит после первого действия.
+  const n = $('notice');
+  if (n.dataset.kind === 'hint') { n.hidden = true; n.textContent = ''; delete n.dataset.kind; }
   renderCanvas();
   // Во время перетаскивания панели и сохранение не трогаем — догонят на отпускании мыши.
   if (drag?.moved) return;

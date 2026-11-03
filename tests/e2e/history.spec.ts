@@ -3,8 +3,10 @@ import {
   submitNames, hitPoint, SCHEMES, exportSvg, validateExport, pressedLabels, segBtn, setScheme, expectNoErrors, savedComposition,
 } from './helpers';
 
-const undo = (page: import('@playwright/test').Page) => page.locator('#btn-undo').click();
-const redo = (page: import('@playwright/test').Page) => page.locator('#btn-redo').click();
+// кнопки «Отменить»/«Вернуть» неактивны, когда нечего отменять/возвращать: тогда нажатие — пустая операция
+const press = async (page: import('@playwright/test').Page, id: string) => { const b = page.locator(id); if (await b.isEnabled()) await b.click(); };
+const undo = (page: import('@playwright/test').Page) => press(page, '#btn-undo');
+const redo = (page: import('@playwright/test').Page) => press(page, '#btn-redo');
 const sig = async (page: import('@playwright/test').Page) => JSON.stringify((await items(page)).map(i => [i.id, i.transform]));
 
 test.describe('История: отмена и возврат', () => {
@@ -42,7 +44,8 @@ test.describe('История: отмена и возврат', () => {
     await redo(page); expect((await items(page)).map(i => i.uid)).toEqual(s1);
     await redo(page); expect((await items(page)).map(i => i.uid)).toEqual(s2);
     await redo(page); expect((await items(page)).map(i => i.uid)).toEqual(s3);
-    await redo(page); expect((await items(page)).map(i => i.uid)).toEqual(s3); // больше нечего возвращать
+    await expect(page.locator('#btn-redo')).toBeDisabled(); // больше нечего возвращать
+    expect((await items(page)).map(i => i.uid)).toEqual(s3);
   });
 
   test('u032 отмена поворота, оттенка, вида и порядка — по шагу, панель согласована', async ({ app: page }) => {
@@ -104,7 +107,7 @@ test.describe('История: отмена и возврат', () => {
     const atStart = await sig(page);
     await undo(page); await undo(page);
     expect(await sig(page)).toBe(atStart);
-    await expect(page.locator('#btn-undo')).toBeEnabled();
+    await expect(page.locator('#btn-undo')).toBeDisabled(); // начало истории
     await expect(page.locator('#btn-redo')).toBeEnabled();
     for (let i = 0; i < 15; i++) await redo(page);
     await redo(page);

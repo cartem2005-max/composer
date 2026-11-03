@@ -136,8 +136,8 @@ async function runFuzz(page: Page, ctx: Ctx, seed: number, steps: number) {
       const v = String(Number((0.1 + rnd() * 1.9).toFixed(2))); log.push('  ' + v);
       await page.locator('#in-scale').fill(v);
     } },
-    { w: 3, name: 'отменить', run: async () => { await page.locator('#btn-undo').click(); } },
-    { w: 2, name: 'вернуть', run: async () => { await page.locator('#btn-redo').click(); } },
+    { w: 3, name: 'отменить', run: async () => { const b = page.locator('#btn-undo'); if (await b.isEnabled()) await b.click(); } },
+    { w: 2, name: 'вернуть', run: async () => { const b = page.locator('#btn-redo'); if (await b.isEnabled()) await b.click(); } },
     { w: 1, name: 'очистить', run: async () => { await page.locator('#btn-clear').click(); } },
     { w: 2, name: 'другой вариант', run: async () => { await page.locator('#btn-variant').click(); } },
     { w: 1, name: 'декор', run: async () => { await page.locator('#in-decor').click(); } },
