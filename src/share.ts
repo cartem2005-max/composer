@@ -2,7 +2,7 @@ import { isObjectId, library, toneCount } from './library';
 import { LAYOUTS } from './layout';
 import { FORMATS } from './render';
 import { addScheme, getScheme, parsePalette } from './schemes';
-import { BG_ROLES, type Composition, type FormatId, type Instance, type LayoutId, type Scheme } from './types';
+import { CANVAS_ROLES, type Composition, type FormatId, type Instance, type LayoutId, type Scheme } from './types';
 
 const MAX_ITEMS = 40;
 const num = (v: unknown, lo: number, hi: number, dflt: number) =>
@@ -36,7 +36,7 @@ export function sanitizeComposition(raw: any): Composition | null {
     layout: LAYOUTS[raw.layout as LayoutId] ? raw.layout : 'compact',
     size: raw.size === 'S' ? 'S' : 'L',
     schemeId: typeof raw.schemeId === 'string' && getScheme(raw.schemeId).id === raw.schemeId ? raw.schemeId : library.schemes[0].id,
-    background: (BG_ROLES as readonly string[]).includes(raw.background) ? raw.background : 'bg1',
+    background: (CANVAS_ROLES as readonly string[]).includes(raw.background) ? raw.background : 'bg1',
     scale: num(raw.scale, 0.05, 3, 1),
     items,
     decor: raw.decor !== false,

@@ -1,4 +1,4 @@
-import { getObject, paint, shapeSet, library } from './library';
+import { getObject, paint, paintDecor, shapeSet, library } from './library';
 import { getScheme } from './schemes';
 import type { Composition, FormatId, Instance } from './types';
 
@@ -28,7 +28,7 @@ export function layerId(c: Composition, it: Instance): string {
 export function instanceMarkup(c: Composition, it: Instance): string {
   const scheme = getScheme(c.schemeId);
   const set = shapeSet(it.objectId, c.size, it.variant);
-  return paint(set.markup, scheme, it.variant, it.tone);
+  return paint(set.markup, scheme, it.variant, it.tone, c.background);
 }
 
 /**
@@ -41,7 +41,7 @@ export function decorSvg(c: Composition): string {
   const s = Math.round((Math.min(f.w, f.h) / d.frame) * 1e5) / 1e5;
   const scheme = getScheme(c.schemeId);
   const items = d.items.map((it, i) =>
-    `<g id="decor-${i + 1}" transform="translate(${r2(it.x * f.w)} ${r2(it.y * f.h)}) scale(${s})">${paint(it.markup, scheme, 'bg', 0)}</g>`);
+    `<g id="decor-${i + 1}" transform="translate(${r2(it.x * f.w)} ${r2(it.y * f.h)}) scale(${s})">${paintDecor(it.markup, scheme, c.background)}</g>`);
   return `<g id="decor">${items.join('')}</g>`;
 }
 

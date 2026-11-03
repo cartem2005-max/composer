@@ -9,7 +9,7 @@ import { autoLayout } from '../src/layout';
 import { compositionSvg, FORMATS } from '../src/render';
 import { sanitizePicks } from '../src/match/catalog';
 import { parsePalette } from '../src/schemes';
-import { BG_ROLES, OBJ_ROLES, type Composition, type FormatId, type LayoutId, type Pick, type Scheme } from '../src/types';
+import { BG_ROLES, CANVAS_ROLES, OBJ_ROLES, type Composition, type FormatId, type LayoutId, type Pick, type Scheme } from '../src/types';
 
 // Детерминированный генератор, чтобы падение можно было воспроизвести.
 function rng(seed: number) {
@@ -31,7 +31,7 @@ function randomComposition(r: () => number): Composition {
     layout: pickOne(r, LAYOUT_IDS),
     size: r() < 0.5 ? 'L' : 'S',
     schemeId: scheme.id,
-    background: pickOne(r, BG_ROLES),
+    background: pickOne(r, CANVAS_ROLES),
     scale: 0.1 + r() * 1.5,
     items: Array.from({ length: n }, (_, i) => {
       const variant = r() < 0.6 ? 'main' as const : 'bg' as const;

@@ -1,5 +1,5 @@
 import data from './library.generated.json';
-import type { Library, LibraryObject, ObjectId, Role, Scheme, ShapeSet, SizeKey, Variant } from './types';
+import type { CanvasRole, Library, LibraryObject, ObjectId, Role, Scheme, ShapeSet, SizeKey, Variant } from './types';
 
 export const library = data as unknown as Library;
 
@@ -56,12 +56,33 @@ export function distinctTones(id: ObjectId, size: SizeKey, variant: Variant): nu
   return out;
 }
 
-export function resolveRole(role: Role, variant: Variant, tone: number): Role {
-  const table = variant === 'main' ? MAIN_TONES : BG_TONES;
-  return table[tone % table.length][role] ?? role;
+export function resolveRole(role: Role, variant: Variant, tone: number, canvas: CanvasRole = 'bg1'): Role {
+  if (variant === 'bg') return bgRole(role, tone, canvas);
+  return MAIN_TONES[tone % MAIN_TONES.length][role] ?? role;
+}
+
+/**
+ * Фоновые объекты нарисованы заливкой bg1 и линиями bg3 — под кадр цвета bg1, как в макете.
+ * На другом цвете кадра линии сливаются с фоном, поэтому фоновый объект подстраивается:
+ * заливка — в цвет кадра (тон 2 — соседний оттенок), линии — bg3, а на кадре bg3 — светлые bg1.
+ * Цвета берутся только из оттенков фона схемы.
+ */
+function bgRole(role: Role, tone: number, canvas: CanvasRole): Role {
+  if (role === 'bg1') return tone % BG_TONES.length ? (canvas === 'bg2' ? 'bg1' : 'bg2') : canvas;
+  if (role === 'bg3') return canvas === 'bg3' ? 'bg1' : 'bg3';
+  return role;
+}
+
+/** Декор фона (линии bg3, овал bg2): элемент цвета кадра заменяется светлым bg1, чтобы не пропадал. */
+export function decorRole(role: Role, canvas: CanvasRole): Role {
+  return role === canvas ? 'bg1' : role;
 }
 
 /** Подставляет реальные HEX выбранной схемы вместо ролей. Геометрия не меняется. */
-export function paint(markup: string, scheme: Scheme, variant: Variant, tone: number): string {
-  return markup.replace(/\{(\w+)\}/g, (_, role: Role) => scheme[resolveRole(role, variant, tone)]);
+export function paint(markup: string, scheme: Scheme, variant: Variant, tone: number, canvas: CanvasRole = 'bg1'): string {
+  return markup.replace(/\{(\w+)\}/g, (_, role: Role) => scheme[resolveRole(role, variant, tone, canvas)]);
+}
+
+export function paintDecor(markup: string, scheme: Scheme, canvas: CanvasRole): string {
+  return markup.replace(/\{(\w+)\}/g, (_, role: Role) => scheme[decorRole(role, canvas)]);
 }

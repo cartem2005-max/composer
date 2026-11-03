@@ -5,6 +5,12 @@ export type Role = 'bg1' | 'bg2' | 'bg3' | 'black' | 'obj1' | 'obj2' | 'obj3' | 
 export const BG_ROLES = ['bg1', 'bg2', 'bg3', 'black'] as const;
 export const OBJ_ROLES = ['obj1', 'obj2', 'obj3', 'white'] as const;
 export type BgRole = (typeof BG_ROLES)[number];
+/**
+ * Цвет заливки кадра. Чёрный в палитре фона нужен для контуров и теней объектов —
+ * заливка им всего кадра стирает их, поэтому кадр заливается только оттенками фона.
+ */
+export const CANVAS_ROLES = ['bg1', 'bg2', 'bg3'] as const;
+export type CanvasRole = (typeof CANVAS_ROLES)[number];
 
 export type Scheme = { id: string; name: string } & Record<Role, string>;
 
@@ -59,7 +65,7 @@ export interface Composition {
   layout: LayoutId;
   size: SizeKey;
   schemeId: string;
-  background: BgRole;
+  background: CanvasRole;
   /** Общий масштаб всех объектов. Он один на композицию, поэтому пропорции между объектами не меняются. */
   scale: number;
   /** Порядок в массиве = порядок слоёв (последний сверху). */

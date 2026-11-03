@@ -6,7 +6,7 @@ import { addScheme, allSchemes, getScheme, parsePalette, ROLE_LABELS } from './s
 import { compositionFromLink, sanitizeComposition, shareLink } from './share';
 import { Store } from './state';
 import { zipSync, strToU8 } from 'fflate';
-import { BG_ROLES, type Composition, type FormatId, type Pick, type PickResult } from './types';
+import { CANVAS_ROLES, type Composition, type FormatId, type Pick, type PickResult } from './types';
 
 const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
 const SAVE_KEY = 'ochen.composition';
@@ -205,9 +205,9 @@ function renderPanels() {
   $<HTMLInputElement>('in-decor').checked = c.decor !== false;
   seg($('seg-size'), { L: 'L — подробнее', S: 'S — проще' }, c.size, v => store.update(d => { d.size = v; }));
   const scheme = getScheme(c.schemeId);
-  seg($('seg-bg'), Object.fromEntries(BG_ROLES.map(r => [r, ROLE_LABELS[r]])) as Record<(typeof BG_ROLES)[number], string>, c.background,
+  seg($('seg-bg'), Object.fromEntries(CANVAS_ROLES.map(r => [r, ROLE_LABELS[r]])) as Record<(typeof CANVAS_ROLES)[number], string>, c.background,
     v => store.update(d => { d.background = v; }));
-  $('seg-bg').querySelectorAll('button').forEach((b, i) => { b.style.setProperty('--sw', scheme[BG_ROLES[i]]); b.classList.add('swatch-btn'); });
+  $('seg-bg').querySelectorAll('button').forEach((b, i) => { b.style.setProperty('--sw', scheme[CANVAS_ROLES[i]]); b.classList.add('swatch-btn'); });
 
   const scale = $<HTMLInputElement>('in-scale');
   scale.value = String(c.scale);
