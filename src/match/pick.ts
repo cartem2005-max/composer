@@ -65,6 +65,9 @@ function matchName(variants: string[]): ObjectId | null {
     for (const c of CATALOG) {
       for (const stem of NAMES[c.id]) {
         if (stemHit(word, stem)) return c.id;
+        // Пропущенная гласная в коротком слове: «кнга», «лмпу», «рчка». Остаток — три согласные, поэтому «папа» и «наша» не задеваются.
+        if (word.length === 4 && stem.length === 4 && /^[бвгджзйклмнпрстфхцчшщ]{3}[аеёиоуыэюя]$/.test(word)
+          && [1, 2, 3].some(i => /[аеёиоуыэюя]/.test(stem[i]) && stem.slice(0, i) + stem.slice(i + 1) === word.slice(0, 3))) return c.id;
         // Опечатки: основа против начала слова той же длины (±1 буква), чтобы окончание не стоило правки.
         // Короткие слова не исправляем («папа» — не «папка»), первая буква должна совпасть («велосипед» — не «мелочи»).
         if (stem.length < 4 || word.length < 5 || word[0] !== stem[0]) continue;

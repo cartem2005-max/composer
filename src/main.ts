@@ -114,9 +114,24 @@ function svgPoint(e: PointerEvent) {
 
 let drag: { uid: number; dx: number; dy: number; moved: boolean } | null = null;
 
+// Клик ловится только по закрашенным пикселям, а у тонкой ручки их мало: при промахе ищем объект рядом.
+function objectNear(e: PointerEvent): Element | null {
+  const direct = (e.target as Element).closest('[data-uid]');
+  if (direct) return direct;
+  const r = e.pointerType === 'touch' ? 14 : 7;
+  for (const k of [0.5, 1]) {
+    for (let a = 0; a < 8; a++) {
+      const el = document.elementFromPoint(e.clientX + Math.cos(a * Math.PI / 4) * r * k, e.clientY + Math.sin(a * Math.PI / 4) * r * k);
+      const g = el?.closest('[data-uid]');
+      if (g && canvasEl.contains(g)) return g;
+    }
+  }
+  return null;
+}
+
 canvasEl.addEventListener('pointerdown', e => {
   if (!svgEl) return;
-  const g = (e.target as Element).closest('[data-uid]');
+  const g = objectNear(e);
   if (!g) { store.select(null); return; }
   const uid = Number(g.getAttribute('data-uid'));
   const it = store.state.items.find(i => i.uid === uid);
