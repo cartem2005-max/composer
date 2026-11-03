@@ -205,10 +205,8 @@ test.describe('Изменённое поведение (стартовая ко�
         const text = files[`illustration-${f}-violet.svg`];
         const r = await validateExport(page, text, { scheme: SCHEMES.violet, fmt: FORMAT_SIZE[f], count: 3 });
         expect(r.groupIds.sort()).toEqual(['book-main-1', 'lamp-main-1', 'phone-main-1']);
-        if (f !== current) {
-          // остальные форматы разложены автоматически: поворота нет, положения не совпадают с ручными
-          expect(Object.values(r.groupTransforms).some(t => t.includes('rotate'))).toBeFalsy();
-        }
+        // остальные форматы разложены автоматически, но повороты сохраняются (пересборка не сбрасывает поворот)
+        expect(Object.values(r.groupTransforms).filter(t => t.includes('rotate(30)'))).toHaveLength(1);
       }
       expect(Object.values((await analyzeSvg(page, files[`illustration-${current}-violet.svg`])).groupTransforms).some(t => t.includes('rotate'))).toBeTruthy();
       expectNoErrors(ctx);

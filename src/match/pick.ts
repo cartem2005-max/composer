@@ -142,6 +142,7 @@ export function pickByNames(text: string): PickResult {
   const positive = new Set<ObjectId>();
   const unknown: string[] = [];
   let partsSeen = 0;
+  let repeats = 0; // повторное упоминание без пометки вида: «книга, книга»
   const setVariant = (id: ObjectId, variant: Pick['variant']) => {
     const p = picks.find(x => x.id === id);
     if (p) p.variant = variant;
@@ -193,7 +194,7 @@ export function pickByNames(text: string): PickResult {
         const mark = near(i + 1, 1) ?? near(i - 1, -1);
         positive.add(tk.id);
         chain.push(tk.id);
-        if (picks.some(p => p.id === tk.id)) { if (mark) setVariant(tk.id, mark); return; }
+        if (picks.some(p => p.id === tk.id)) { if (mark) setVariant(tk.id, mark); else repeats++; return; }
         picks.push({ id: tk.id, variant: mark ?? (groupBg ? 'bg' : 'main') });
       });
     }
@@ -210,7 +211,7 @@ export function pickByNames(text: string): PickResult {
   if (clean.filter(p => p.variant === 'bg').length > wanted.filter(p => p.variant === 'bg').length && !notes.length)
     notes.push('Четвёртый и следующие главные объекты стали фоновыми: главных в композиции не больше трёх.');
   // «две книги», «книга, книга» — копии не создаются: каждый объект берётся один раз.
-  const repeated = wanted.length > distinct || /(^|[s,])(d+|два|две|три|четыре|пять|шесть|несколько|много)s/i.test(raw);
+  const repeated = repeats > 0 || /(^|[\s,])(\d+|два|две|три|четыре|пять|шесть|несколько|много)\s/i.test(raw);
   if (repeated) notes.push('Каждый объект добавлен один раз — копии делает кнопка «Дублировать» (Ctrl+D).');
   if (unknown.length) notes.push(`Не нашлось в библиотеке: ${unknown.join(', ')}.`);
   const reason = clean.length
