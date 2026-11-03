@@ -1,0 +1,16 @@
+node_modules
+dist
+.env*
+env.local
+.vercel
+test-results
+playwright-report
+tests/e2e/_tmp
+
+# Рабочие заметки и черновые отчёты прогонов — не для репозитория
+NOTES-artem.md
+PLAN.md
+tests/report-ai*.md
+!tests/report-ai-final.md
+tests/report-ai-prev.md
+tests/review

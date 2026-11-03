@@ -1,0 +1,409 @@
+[
+  {
+    "id": "gn001",
+    "text": "ручку, пожалуйста, и ещё лампу",
+    "expect": [
+      {
+        "id": "pen",
+        "variant": "main"
+      },
+      {
+        "id": "lamp",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Вежливое слово отдельной частью и «и ещё». Проверено через pickByNames: совпадает."
+  },
+  {
+    "id": "gn002",
+    "text": "две штуки: телефон и кошелёк",
+    "expect": [
+      {
+        "id": "phone",
+        "variant": "main"
+      },
+      {
+        "id": "wallet",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Вводная «две штуки:» перед списком. Проверено через pickByNames: совпадает."
+  },
+  {
+    "id": "gn003",
+    "text": "книга (главная) и лампа (фоновая)",
+    "expect": [
+      {
+        "id": "book",
+        "variant": "main"
+      },
+      {
+        "id": "lamp",
+        "variant": "bg"
+      }
+    ],
+    "kind": "names",
+    "note": "Пометки в скобках женского рода. Проверено через pickByNames: совпадает."
+  },
+  {
+    "id": "gn004",
+    "text": "тюльпаны — на фон, ручка — вперёд",
+    "expect": [
+      {
+        "id": "tulips",
+        "variant": "bg"
+      },
+      {
+        "id": "pen",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "«на фон» (винительный) после тире; «вперёд» без пометки — главный. Проверено через pickByNames: совпадает."
+  },
+  {
+    "id": "gn005",
+    "text": "кошелёк и монеты, монеты монохромные",
+    "expect": [
+      {
+        "id": "wallet",
+        "variant": "main"
+      },
+      {
+        "id": "coin",
+        "variant": "bg"
+      }
+    ],
+    "kind": "names",
+    "note": "Уточнение вида повтором объекта отдельной частью. Расхождение с кодом. Код сейчас даёт: wallet, coin.",
+    "contract_gap": true
+  },
+  {
+    "id": "gn006",
+    "text": "book — главным, lamp — фоном",
+    "expect": [
+      {
+        "id": "book",
+        "variant": "main"
+      },
+      {
+        "id": "lamp",
+        "variant": "bg"
+      }
+    ],
+    "kind": "names",
+    "note": "Творительный падеж пометок: «главным», «фоном». Проверено через pickByNames: совпадает."
+  },
+  {
+    "id": "gn007",
+    "text": "1) лампа 2) книга 3) ручка (фон)",
+    "expect": [
+      {
+        "id": "lamp",
+        "variant": "main"
+      },
+      {
+        "id": "book",
+        "variant": "main"
+      },
+      {
+        "id": "pen",
+        "variant": "bg"
+      }
+    ],
+    "kind": "names",
+    "note": "Нумерация со скобками без запятых; пометка только у последнего. Проверено через pickByNames: совпадает."
+  },
+  {
+    "id": "gn008",
+    "text": "книгу и ручку убери, оставь лампу",
+    "expect": [
+      {
+        "id": "lamp",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Глаголы «убери/оставь» — отказ от объектов. Расхождение с кодом. Код сейчас даёт: book, pen, lamp.",
+    "contract_gap": true
+  },
+  {
+    "id": "gn009",
+    "text": "никаких монет, только кошелёк",
+    "expect": [
+      {
+        "id": "wallet",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Отрицание «никаких X». Расхождение с кодом. Код сейчас даёт: coin, wallet.",
+    "contract_gap": true
+  },
+  {
+    "id": "gn010",
+    "text": "книга, наушники, но фоновые",
+    "expect": [
+      {
+        "id": "book",
+        "variant": "main"
+      },
+      {
+        "id": "headphones",
+        "variant": "bg"
+      }
+    ],
+    "kind": "names",
+    "note": "Пометка вида после «но» отдельной частью. Расхождение с кодом. Код сейчас даёт: book, headphones.",
+    "contract_gap": true
+  },
+  {
+    "id": "gn011",
+    "text": "чёрно-белая лампа и цветная книга",
+    "expect": [
+      {
+        "id": "lamp",
+        "variant": "bg"
+      },
+      {
+        "id": "book",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "«Чёрно-белая» = монохромная (фон), «цветная» — главная. Расхождение с кодом. Код сейчас даёт: lamp, book.",
+    "contract_gap": true
+  },
+  {
+    "id": "gn012",
+    "text": "на переднем плане — кошелёк, на заднем — монеты",
+    "expect": [
+      {
+        "id": "wallet",
+        "variant": "main"
+      },
+      {
+        "id": "coin",
+        "variant": "bg"
+      }
+    ],
+    "kind": "names",
+    "note": "«На заднем» без слова «плане» (эллипсис). Расхождение с кодом. Код сейчас даёт: wallet, coin.",
+    "contract_gap": true
+  },
+  {
+    "id": "gn013",
+    "text": "Pen. Lamp in the background.",
+    "expect": [
+      {
+        "id": "pen",
+        "variant": "main"
+      },
+      {
+        "id": "lamp",
+        "variant": "bg"
+      }
+    ],
+    "kind": "names",
+    "note": "Английские предложения через точку; «in the background» после объекта. Проверено через pickByNames: совпадает."
+  },
+  {
+    "id": "gn014",
+    "text": "a coin and a wallet, both in the background",
+    "expect": [
+      {
+        "id": "coin",
+        "variant": "main"
+      },
+      {
+        "id": "wallet",
+        "variant": "bg"
+      }
+    ],
+    "kind": "names",
+    "note": "Общая пометка «both in the background» на оба объекта; по контракту sanitizePicks первый фоновый становится главным. Расхождение с кодом. Код сейчас даёт: coin, wallet.",
+    "contract_gap": true
+  },
+  {
+    "id": "gn015",
+    "text": "книга\nлампа фон\nручка",
+    "expect": [
+      {
+        "id": "book",
+        "variant": "main"
+      },
+      {
+        "id": "lamp",
+        "variant": "bg"
+      },
+      {
+        "id": "pen",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Перенос строки как разделитель (дефект c073 в прошлом). Проверено через pickByNames: совпадает."
+  },
+  {
+    "id": "gn016",
+    "text": "КНИГА+ЛАМПА+РУЧКА",
+    "expect": [
+      {
+        "id": "book",
+        "variant": "main"
+      },
+      {
+        "id": "lamp",
+        "variant": "main"
+      },
+      {
+        "id": "pen",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Плюсы без пробелов, капс. Проверено через pickByNames: совпадает."
+  },
+  {
+    "id": "gn017",
+    "text": "книги нет, есть лампа",
+    "expect": [
+      {
+        "id": "lamp",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Отрицание после объекта: «книги нет». Расхождение с кодом. Код сейчас даёт: book, lamp.",
+    "contract_gap": true
+  },
+  {
+    "id": "gn018",
+    "text": "книга, лампу не надо",
+    "expect": [
+      {
+        "id": "book",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Отрицание после объекта: «лампу не надо». Расхождение с кодом. Код сейчас даёт: book, lamp.",
+    "contract_gap": true
+  },
+  {
+    "id": "gn019",
+    "text": "кошелёк-монетница",
+    "expect": [
+      {
+        "id": "wallet",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Составное слово через дефис: монетница — это вид кошелька, а не монета. Спорно: Можно читать как «кошелёк и монеты»; эталон — один предмет. Расхождение с кодом. Код сейчас даёт: wallet, coin.",
+    "contract_gap": true,
+    "ambiguous": true
+  },
+  {
+    "id": "gn020",
+    "text": "Фоном: лампа и тюльпаны. Главное — ручка.",
+    "expect": [
+      {
+        "id": "lamp",
+        "variant": "bg"
+      },
+      {
+        "id": "tulips",
+        "variant": "bg"
+      },
+      {
+        "id": "pen",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Липкая пометка «Фоном:» (творительный) до точки, потом главный. Расхождение с кодом. Код сейчас даёт: lamp(bg), tulips, pen.",
+    "contract_gap": true
+  },
+  {
+    "id": "gn021",
+    "text": "пять монет и ни одного кошелька",
+    "expect": [
+      {
+        "id": "coin",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Отрицание «ни одного X». Расхождение с кодом. Код сейчас даёт: coin, wallet.",
+    "contract_gap": true
+  },
+  {
+    "id": "gn022",
+    "text": "book; phone (bg); pen (bg); lamp (bg); coin (bg); wallet (bg)",
+    "expect": [
+      {
+        "id": "book",
+        "variant": "main"
+      },
+      {
+        "id": "phone",
+        "variant": "bg"
+      },
+      {
+        "id": "pen",
+        "variant": "bg"
+      },
+      {
+        "id": "lamp",
+        "variant": "bg"
+      },
+      {
+        "id": "coin",
+        "variant": "bg"
+      }
+    ],
+    "kind": "names",
+    "note": "Шесть объектов: по контракту остаются первые пять. Проверено через pickByNames: совпадает."
+  },
+  {
+    "id": "gn023",
+    "text": "4 главных: книга, лампа, ручка, папка",
+    "expect": [
+      {
+        "id": "book",
+        "variant": "main"
+      },
+      {
+        "id": "lamp",
+        "variant": "main"
+      },
+      {
+        "id": "pen",
+        "variant": "main"
+      },
+      {
+        "id": "folder",
+        "variant": "bg"
+      }
+    ],
+    "kind": "names",
+    "note": "«Главных» (родительный мн.) и 4 главных при лимите 3: четвёртый становится фоновым по контракту. Проверено через pickByNames: совпадает."
+  },
+  {
+    "id": "gn024",
+    "text": "Тюльпаны. Без вазы.",
+    "expect": [
+      {
+        "id": "tulips",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "«Без вазы» относится к вазе, а не к тюльпанам: объект в библиотеке один — тюльпаны в вазе. Спорно: Можно считать, что пользователь отказывается от объекта «тюльпаны в вазе» целиком; эталон — показать тюльпаны. Расхождение с кодом. Код сейчас даёт: —.",
+    "contract_gap": true,
+    "ambiguous": true
+  }
+]

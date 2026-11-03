@@ -1,0 +1,850 @@
+[
+  {
+    "id": "hn001",
+    "text": "лампа, книга, и ещё ручка",
+    "expect": [
+      {
+        "id": "lamp",
+        "variant": "main"
+      },
+      {
+        "id": "book",
+        "variant": "main"
+      },
+      {
+        "id": "pen",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Запятая перед «и ещё»."
+  },
+  {
+    "id": "hn002",
+    "text": "книга фоновая, телефон главный",
+    "expect": [
+      {
+        "id": "book",
+        "variant": "bg"
+      },
+      {
+        "id": "phone",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Пометка после существительного."
+  },
+  {
+    "id": "hn003",
+    "text": "лампу на задний план, книгу вперёд",
+    "expect": [
+      {
+        "id": "lamp",
+        "variant": "bg"
+      },
+      {
+        "id": "book",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "«На задний план» (винительный) + «вперёд» без пометки."
+  },
+  {
+    "id": "hn004",
+    "text": "фон: тюльпаны; главное: ручка",
+    "expect": [
+      {
+        "id": "tulips",
+        "variant": "bg"
+      },
+      {
+        "id": "pen",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "«фон:» — липкая пометка до «;», «главное:» — главный."
+  },
+  {
+    "id": "hn005",
+    "text": "ручка (цветная), папка (монохром)",
+    "expect": [
+      {
+        "id": "pen",
+        "variant": "main"
+      },
+      {
+        "id": "folder",
+        "variant": "bg"
+      }
+    ],
+    "kind": "names",
+    "note": "Пометки «цветная»/«монохром» в скобках."
+  },
+  {
+    "id": "hn006",
+    "text": "bg: lamp, book; main: pen",
+    "expect": [
+      {
+        "id": "lamp",
+        "variant": "bg"
+      },
+      {
+        "id": "book",
+        "variant": "bg"
+      },
+      {
+        "id": "pen",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Английские липкие пометки с двоеточием."
+  },
+  {
+    "id": "hn007",
+    "text": "наушники сзади и телефон спереди",
+    "expect": [
+      {
+        "id": "headphones",
+        "variant": "bg"
+      },
+      {
+        "id": "phone",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "«сзади»/«спереди» после объектов."
+  },
+  {
+    "id": "hn008",
+    "text": "монета×3, кошелёк",
+    "expect": [
+      {
+        "id": "coin",
+        "variant": "main"
+      },
+      {
+        "id": "wallet",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Знак × и число: один объект."
+  },
+  {
+    "id": "hn009",
+    "text": "Книга. Лампа. Ручка.",
+    "expect": [
+      {
+        "id": "book",
+        "variant": "main"
+      },
+      {
+        "id": "lamp",
+        "variant": "main"
+      },
+      {
+        "id": "pen",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Точки как разделители."
+  },
+  {
+    "id": "hn010",
+    "text": "книга и лампа и ручка и монета и пазл",
+    "expect": [
+      {
+        "id": "book",
+        "variant": "main"
+      },
+      {
+        "id": "lamp",
+        "variant": "main"
+      },
+      {
+        "id": "pen",
+        "variant": "main"
+      },
+      {
+        "id": "coin",
+        "variant": "bg"
+      },
+      {
+        "id": "puzzle",
+        "variant": "bg"
+      }
+    ],
+    "kind": "names",
+    "note": "Пять через «и»: четвёртый и пятый становятся фоном (не больше 3 главных)."
+  },
+  {
+    "id": "hn011",
+    "text": "хочу чтобы на картинке были тюльпаны и кошелёк",
+    "expect": [
+      {
+        "id": "tulips",
+        "variant": "main"
+      },
+      {
+        "id": "wallet",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Просьба свободным текстом."
+  },
+  {
+    "id": "hn012",
+    "text": "ничего кроме книги",
+    "expect": [
+      {
+        "id": "book",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "«Ничего кроме X» = только X. Код трактует «кроме» как отрицание и убирает книгу — список пуст. Код сейчас даёт: —.",
+    "contract_gap": true
+  },
+  {
+    "id": "hn013",
+    "text": "не фон, а главная: лампа",
+    "expect": [
+      {
+        "id": "lamp",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "«не фон» не должно стать отрицанием лампы."
+  },
+  {
+    "id": "hn014",
+    "text": "лампа без фона и книга",
+    "expect": [
+      {
+        "id": "lamp",
+        "variant": "main"
+      },
+      {
+        "id": "book",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "«без фона» — отказ от фона, не отрицание книги."
+  },
+  {
+    "id": "hn015",
+    "text": "телефон, кроме того книга",
+    "expect": [
+      {
+        "id": "phone",
+        "variant": "main"
+      },
+      {
+        "id": "book",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "«Кроме того» = «а также». Код считает «кроме» отрицанием и убирает книгу. Код сейчас даёт: phone.",
+    "contract_gap": true
+  },
+  {
+    "id": "hn016",
+    "text": "папка папка папка",
+    "expect": [
+      {
+        "id": "folder",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Повтор без разделителей."
+  },
+  {
+    "id": "hn017",
+    "text": "Lamp; Book; Pen",
+    "expect": [
+      {
+        "id": "lamp",
+        "variant": "main"
+      },
+      {
+        "id": "book",
+        "variant": "main"
+      },
+      {
+        "id": "pen",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Английские с «;» и заглавными."
+  },
+  {
+    "id": "hn018",
+    "text": "книга — главная, остальное фоном: лампа, ручка",
+    "expect": [
+      {
+        "id": "book",
+        "variant": "main"
+      },
+      {
+        "id": "lamp",
+        "variant": "bg"
+      },
+      {
+        "id": "pen",
+        "variant": "bg"
+      }
+    ],
+    "kind": "names",
+    "note": "«остальное фоном:» должно действовать на весь хвост. Код знает только «фон:»/«фоновые:», поэтому ручка остаётся главной. Код сейчас даёт: book, lamp(bg), pen.",
+    "contract_gap": true
+  },
+  {
+    "id": "hn019",
+    "text": "WALLET and COIN",
+    "expect": [
+      {
+        "id": "wallet",
+        "variant": "main"
+      },
+      {
+        "id": "coin",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Капс латиницей."
+  },
+  {
+    "id": "hn020",
+    "text": "тюльпаны в вазе на столе, лампа",
+    "expect": [
+      {
+        "id": "tulips",
+        "variant": "main"
+      },
+      {
+        "id": "lamp",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Лишние слова «на столе» не мешают."
+  },
+  {
+    "id": "hn021",
+    "text": "книга:main lamp:bg",
+    "expect": [
+      {
+        "id": "book",
+        "variant": "main"
+      },
+      {
+        "id": "lamp",
+        "variant": "bg"
+      }
+    ],
+    "kind": "names",
+    "note": "Формат id:variant без запятой."
+  },
+  {
+    "id": "hn022",
+    "text": "монеты (фон) и кошелёк (фон) и ручка",
+    "expect": [
+      {
+        "id": "coin",
+        "variant": "bg"
+      },
+      {
+        "id": "wallet",
+        "variant": "bg"
+      },
+      {
+        "id": "pen",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Две пометки в скобках и одна главная."
+  },
+  {
+    "id": "hn023",
+    "text": "все фоновые: книга, лампа",
+    "expect": [
+      {
+        "id": "book",
+        "variant": "main"
+      },
+      {
+        "id": "lamp",
+        "variant": "bg"
+      }
+    ],
+    "kind": "names",
+    "note": "Все фоновые невозможно: хотя бы один главный, им становится первый."
+  },
+  {
+    "id": "hn024",
+    "text": "смартфон + наушники, лампа на фоне",
+    "expect": [
+      {
+        "id": "phone",
+        "variant": "main"
+      },
+      {
+        "id": "headphones",
+        "variant": "main"
+      },
+      {
+        "id": "lamp",
+        "variant": "bg"
+      }
+    ],
+    "kind": "names",
+    "note": "Смешанные разделители."
+  },
+  {
+    "id": "hn025",
+    "text": "Ручка, карандаш и фломастер",
+    "expect": [
+      {
+        "id": "pen",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Три синонима одного объекта — один объект."
+  },
+  {
+    "id": "hn026",
+    "text": "книга, телефон, не надо лампу",
+    "expect": [
+      {
+        "id": "book",
+        "variant": "main"
+      },
+      {
+        "id": "phone",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "«не надо X» — отрицание через слово между «не» и объектом."
+  },
+  {
+    "id": "hn027",
+    "text": "только книга",
+    "expect": [
+      {
+        "id": "book",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "«только» не мешает."
+  },
+  {
+    "id": "hn028",
+    "text": "📁📁 + 🖊",
+    "expect": [
+      {
+        "id": "folder",
+        "variant": "main"
+      },
+      {
+        "id": "pen",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Эмодзи папки и ручки."
+  },
+  {
+    "id": "hn029",
+    "text": "lamp bg, book main, pen",
+    "expect": [
+      {
+        "id": "lamp",
+        "variant": "bg"
+      },
+      {
+        "id": "book",
+        "variant": "main"
+      },
+      {
+        "id": "pen",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Пометки без двоеточия после id."
+  },
+  {
+    "id": "hn030",
+    "text": "кошелёк с монетами на заднем плане",
+    "expect": [
+      {
+        "id": "wallet",
+        "variant": "main"
+      },
+      {
+        "id": "coin",
+        "variant": "bg"
+      }
+    ],
+    "kind": "names",
+    "note": "Пометка относится к ближайшему объекту (монеты); кошелёк остаётся главным, иначе не было бы главных."
+  },
+  {
+    "id": "hn031",
+    "text": "вместо книги — лампа",
+    "expect": [
+      {
+        "id": "lamp",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "«вместо X» убирает X."
+  },
+  {
+    "id": "hn032",
+    "text": "книга, лампа, ручка, монета, пазл, папка, телефон",
+    "expect": [
+      {
+        "id": "book",
+        "variant": "main"
+      },
+      {
+        "id": "lamp",
+        "variant": "main"
+      },
+      {
+        "id": "pen",
+        "variant": "main"
+      },
+      {
+        "id": "coin",
+        "variant": "bg"
+      },
+      {
+        "id": "puzzle",
+        "variant": "bg"
+      }
+    ],
+    "kind": "names",
+    "note": "Семь объектов: берём первые пять."
+  },
+  {
+    "id": "hn033",
+    "text": "Buch, Stift und Kopfhörer",
+    "expect": [
+      {
+        "id": "book",
+        "variant": "main"
+      },
+      {
+        "id": "pen",
+        "variant": "main"
+      },
+      {
+        "id": "headphones",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Немецкий с умлаутом: ö → o."
+  },
+  {
+    "id": "hn034",
+    "text": "навушники та гаманець",
+    "expect": [
+      {
+        "id": "headphones",
+        "variant": "main"
+      },
+      {
+        "id": "wallet",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Украинский союз «та» — не разделитель, но оба объекта находятся."
+  },
+  {
+    "id": "hn035",
+    "text": "фоновая: книга",
+    "expect": [
+      {
+        "id": "book",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Единственный объект фоновым быть не может."
+  },
+  {
+    "id": "hn036",
+    "text": "lamp (background), pen (main)",
+    "expect": [
+      {
+        "id": "lamp",
+        "variant": "bg"
+      },
+      {
+        "id": "pen",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Английские пометки в скобках."
+  },
+  {
+    "id": "hn037",
+    "text": "книга 2 шт, ручки 3 шт",
+    "expect": [
+      {
+        "id": "book",
+        "variant": "main"
+      },
+      {
+        "id": "pen",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Количества со «шт»."
+  },
+  {
+    "id": "hn038",
+    "text": "ТЕЛЕФОН!!! И НАУШНИКИ!!!",
+    "expect": [
+      {
+        "id": "phone",
+        "variant": "main"
+      },
+      {
+        "id": "headphones",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Капс и восклицания."
+  },
+  {
+    "id": "hn039",
+    "text": "pen, pencil, pens",
+    "expect": [
+      {
+        "id": "pen",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "pen/pencil/pens — один объект; «pen» сравнивается целым словом."
+  },
+  {
+    "id": "hn040",
+    "text": "не книга, а лампа",
+    "expect": [
+      {
+        "id": "lamp",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "«не X, а Y»."
+  },
+  {
+    "id": "hn041",
+    "text": "тюльпаны main, папка bg, монета bg",
+    "expect": [
+      {
+        "id": "tulips",
+        "variant": "main"
+      },
+      {
+        "id": "folder",
+        "variant": "bg"
+      },
+      {
+        "id": "coin",
+        "variant": "bg"
+      }
+    ],
+    "kind": "names",
+    "note": "Русские названия с английскими пометками."
+  },
+  {
+    "id": "hn042",
+    "text": "книга\nфон: лампа, ручка\nтелефон",
+    "expect": [
+      {
+        "id": "book",
+        "variant": "main"
+      },
+      {
+        "id": "lamp",
+        "variant": "bg"
+      },
+      {
+        "id": "pen",
+        "variant": "bg"
+      },
+      {
+        "id": "phone",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Строки: липкая пометка действует только на свою строку."
+  },
+  {
+    "id": "hn043",
+    "text": "phone/wallet/coin",
+    "expect": [
+      {
+        "id": "phone",
+        "variant": "main"
+      },
+      {
+        "id": "wallet",
+        "variant": "main"
+      },
+      {
+        "id": "coin",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Слэш как разделитель."
+  },
+  {
+    "id": "hn044",
+    "text": "Телефон & наушники & пазл & папка",
+    "expect": [
+      {
+        "id": "phone",
+        "variant": "main"
+      },
+      {
+        "id": "headphones",
+        "variant": "main"
+      },
+      {
+        "id": "puzzle",
+        "variant": "main"
+      },
+      {
+        "id": "folder",
+        "variant": "bg"
+      }
+    ],
+    "kind": "names",
+    "note": "Амперсанд; четвёртый — фон."
+  },
+  {
+    "id": "hn045",
+    "text": "кошелек главный а монета фоном",
+    "expect": [
+      {
+        "id": "wallet",
+        "variant": "main"
+      },
+      {
+        "id": "coin",
+        "variant": "bg"
+      }
+    ],
+    "kind": "names",
+    "note": "«а» как разделитель, пометки без запятых."
+  },
+  {
+    "id": "hn046",
+    "text": "лампа - фон; книга - главная",
+    "expect": [
+      {
+        "id": "lamp",
+        "variant": "bg"
+      },
+      {
+        "id": "book",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Дефис между объектом и пометкой."
+  },
+  {
+    "id": "hn047",
+    "text": "ручка, но без папки",
+    "expect": [
+      {
+        "id": "pen",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "«но без X»."
+  },
+  {
+    "id": "hn048",
+    "text": "какой-нибудь телефон и какая-нибудь книжка",
+    "expect": [
+      {
+        "id": "phone",
+        "variant": "main"
+      },
+      {
+        "id": "book",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Слова с дефисом перед объектами."
+  },
+  {
+    "id": "hn049",
+    "text": "папка с документами сзади, спереди ручка и монета",
+    "expect": [
+      {
+        "id": "folder",
+        "variant": "bg"
+      },
+      {
+        "id": "pen",
+        "variant": "main"
+      },
+      {
+        "id": "coin",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "«папка с документами сзади»: пометка стоит через слово «документами», код её не видит и делает папку главной. Код сейчас даёт: folder, pen, coin.",
+    "contract_gap": true
+  },
+  {
+    "id": "hn050",
+    "text": "кружка, ноутбук, лампа",
+    "expect": [
+      {
+        "id": "lamp",
+        "variant": "main"
+      }
+    ],
+    "kind": "names",
+    "note": "Два предмета вне библиотеки и один из неё."
+  }
+]

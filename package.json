@@ -1,0 +1,30 @@
+{
+  "name": "ochen-compose",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "library": "node scripts/build-library.mjs",
+    "dev": "npm run library && vite",
+    "build": "npm run library && tsc --noEmit -p tsconfig.build.json && vite build",
+    "test": "npm run library && vitest run",
+    "preview": "vite preview",
+    "examples": "tsx scripts/examples.ts",
+    "eval:ai": "tsx scripts/eval-ai.ts",
+    "e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1",
+    "@types/node": "^22.15.21",
+    "@vercel/node": "^5.1.14",
+    "@xmldom/xmldom": "^0.9.8",
+    "svg-path-bbox": "^2.1.0",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "vitest": "^3.1.4"
+  },
+  "dependencies": {
+    "fflate": "^0.8.2"
+  }
+}

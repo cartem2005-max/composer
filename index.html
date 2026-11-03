@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Сборщик иллюстраций</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">Сборщик иллюстраций <span>из библиотеки компонентов</span></div>
+    <form id="form-metaphor" class="ask">
+      <label for="in-metaphor">Метафора или заголовок</label>
+      <div class="row">
+        <input id="in-metaphor" maxlength="300" placeholder="Например: как накопить на отпуск" autocomplete="off" />
+        <button type="submit" class="primary">Собрать</button>
+      </div>
+    </form>
+    <form id="form-names" class="ask">
+      <label for="in-names">Или названия компонентов</label>
+      <div class="row">
+        <input id="in-names" maxlength="300" placeholder="книга, лампа, ручка" autocomplete="off" />
+        <button type="submit">Собрать</button>
+      </div>
+    </form>
+  </header>
+  <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+
+  <main class="layout">
+    <aside class="panel" aria-label="Библиотека">
+      <h2>Библиотека</h2>
+      <div class="seg add-as" id="seg-add" role="group" aria-label="Добавлять как"></div>
+      <p class="hint">Клик — добавить на холст. Shift+клик — другим видом.</p>
+      <div id="library" class="library"></div>
+    </aside>
+
+    <section class="stage">
+      <div class="stage-bar">
+        <div class="seg" id="seg-format" role="group" aria-label="Формат"></div>
+        <div class="seg" id="seg-layout" role="group" aria-label="Раскладка"></div>
+        <button id="btn-variant" title="Та же подборка, другая расстановка">Другой вариант</button>
+      </div>
+      <div class="canvas-wrap" id="canvas-wrap">
+        <div id="canvas" class="canvas"></div>
+      </div>
+      <div class="stage-bar">
+        <button id="btn-undo" title="Ctrl+Z">Отменить</button>
+        <button id="btn-redo" title="Ctrl+Shift+Z">Вернуть</button>
+        <button id="btn-clear">Очистить</button>
+        <span class="spacer"></span>
+        <button id="btn-figma" class="primary" title="SVG в буфер обмена — вставка в Figma через Ctrl+V">Копировать для Figma</button>
+        <button id="btn-export">Скачать SVG</button>
+        <button id="btn-formats" title="Та же подборка в 1200×630, квадрате и вертикали">Все форматы (zip)</button>
+        <button id="btn-png">PNG-превью</button>
+        <button id="btn-share" title="Ссылка, по которой откроется эта композиция">Поделиться</button>
+      </div>
+    </section>
+
+    <aside class="panel" aria-label="Настройки">
+      <h2>Композиция</h2>
+      <div class="field"><span>Размер объектов</span><div class="seg" id="seg-size"></div></div>
+      <div class="field">
+        <span>Масштаб</span>
+        <input type="range" id="in-scale" min="0.1" max="2" step="0.01" />
+      </div>
+      <div class="field"><span>Цветовая схема</span><div id="schemes" class="schemes"></div></div>
+      <div class="field"><span>Цвет фона</span><div class="seg" id="seg-bg"></div></div>
+      <label class="check"><input type="checkbox" id="in-decor" checked /> Декор фона из макета</label>
+      <details class="field">
+        <summary>Загрузить палитру</summary>
+        <textarea id="in-palette" rows="4" placeholder='6 HEX: 3 цвета фона, 3 цвета объектов&#10;#D7CDF5 #AA9BF0 #7864D7 #F9ECB0 #F9A3AA #FFE3E1&#10;или JSON {"name":"…","bg":[…],"obj":[…]}'></textarea>
+        <div class="row">
+          <button id="btn-palette">Применить</button>
+          <label class="file">Файл JSON<input type="file" id="file-palette" accept=".json,.txt,application/json,text/plain" /></label>
+        </div>
+      </details>
+
+      <h2>Объект</h2>
+      <div id="object-panel" class="object-panel"><p class="hint">Выберите объект на холсте.</p></div>
+      <p class="hint keys">Перетаскивание — мышью. Delete или Backspace — удалить, Ctrl+D — дублировать, R / Shift+R — повернуть на ±15°, [ и ] — слой ниже/выше, стрелки — сдвиг (с Shift — крупнее), Esc — снять выделение, Ctrl+Z / Ctrl+Shift+Z — отменить / вернуть.</p>
+    </aside>
+  </main>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
