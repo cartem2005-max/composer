@@ -258,17 +258,17 @@ function renderPanels() {
     const o = getObject(sel.objectId);
     panel.innerHTML = `
       <p class="obj-title">${o.name} · <span>${layerId(c, sel)}</span></p>
-      <div class="row wrap">
+      <div class="row pair">
         <button data-a="variant">${sel.variant === 'main' ? 'Сделать фоновым' : 'Сделать главным'}</button>
         ${(() => { const t = distinctTones(sel.objectId, c.size, sel.variant); return t.length > 1 ? `<button data-a="tone">Другие цвета (${Math.max(0, t.indexOf(sel.tone)) + 1}/${t.length})</button>` : ''; })()}
       </div>
       <label class="field"><span>Поворот: ${Math.round(sel.rotation)}°</span>
         <input type="range" min="0" max="359" step="1" value="${sel.rotation}" data-a="rot" /></label>
-      <div class="row wrap">
+      <div class="row quad">
         <button data-a="front" title="]">Выше</button><button data-a="back" title="[">Ниже</button>
         <button data-a="top">Наверх</button><button data-a="bottom">Вниз</button>
       </div>
-      <div class="row wrap">
+      <div class="row pair">
         <button data-a="dup" title="Ctrl+D">Дублировать</button>
         <button data-a="del" class="danger" title="Delete">Удалить</button>
       </div>`;
@@ -298,6 +298,7 @@ function renderAddAs() {
 function renderLibrary() {
   const el = $('library');
   const scheme = getScheme(store.state.schemeId);
+  el.style.setProperty('--tile', scheme.bg1); // подложка карточек — светлый фон текущей схемы
   el.innerHTML = '';
   for (const o of library.objects) {
     const s = o.sizes.S.main;

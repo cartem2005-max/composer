@@ -38,20 +38,25 @@
       <div class="stage-bar">
         <div class="seg" id="seg-format" role="group" aria-label="Формат"></div>
         <div class="seg" id="seg-layout" role="group" aria-label="Раскладка"></div>
+        <span class="spacer"></span>
         <button id="btn-variant" title="Та же подборка, другая расстановка">Другой вариант</button>
       </div>
       <div class="canvas-wrap" id="canvas-wrap">
         <div id="canvas" class="canvas"></div>
       </div>
       <div class="stage-bar">
-        <button id="btn-undo" title="Ctrl+Z">Отменить</button>
-        <button id="btn-redo" title="Ctrl+Shift+Z">Вернуть</button>
+        <div class="group" role="group" aria-label="История">
+          <button id="btn-undo" title="Ctrl+Z">Отменить</button>
+          <button id="btn-redo" title="Ctrl+Shift+Z">Вернуть</button>
+        </div>
         <button id="btn-clear">Очистить</button>
         <span class="spacer"></span>
         <button id="btn-figma" class="primary" title="SVG в буфер обмена — вставка в Figma через Ctrl+V">Копировать для Figma</button>
-        <button id="btn-export">Скачать SVG</button>
-        <button id="btn-formats" title="Та же подборка в 1200×630, квадрате и вертикали">Все форматы (zip)</button>
-        <button id="btn-png">PNG-превью</button>
+        <div class="group" role="group" aria-label="Скачать">
+          <button id="btn-export">Скачать SVG</button>
+          <button id="btn-formats" title="Та же подборка в 1200×630, квадрате и вертикали">Все форматы (zip)</button>
+          <button id="btn-png">PNG-превью</button>
+        </div>
         <button id="btn-share" title="Ссылка, по которой откроется эта композиция">Поделиться</button>
       </div>
     </section>
@@ -63,10 +68,10 @@
         <span>Масштаб</span>
         <input type="range" id="in-scale" min="0.1" max="2" step="0.01" />
       </div>
-      <div class="field"><span>Цветовая схема</span><div id="schemes" class="schemes"></div></div>
-      <div class="field"><span>Цвет фона</span><div class="seg" id="seg-bg"></div></div>
+      <div class="field start"><span>Цветовая схема</span><div id="schemes" class="schemes"></div></div>
+      <div class="field"><span>Цвет фона</span><div class="seg fill" id="seg-bg"></div></div>
       <label class="check"><input type="checkbox" id="in-decor" checked /> Декор фона из макета</label>
-      <details class="field">
+      <details class="palette">
         <summary>Загрузить палитру</summary>
         <textarea id="in-palette" rows="4" placeholder='6 HEX: 3 цвета фона, 3 цвета объектов&#10;#D7CDF5 #AA9BF0 #7864D7 #F9ECB0 #F9A3AA #FFE3E1&#10;или JSON {"name":"…","bg":[…],"obj":[…]}'></textarea>
         <div class="row">
@@ -77,7 +82,10 @@
 
       <h2>Объект</h2>
       <div id="object-panel" class="object-panel"><p class="hint">Выберите объект на холсте.</p></div>
-      <p class="hint keys">Перетаскивание — мышью. Delete или Backspace — удалить, Ctrl+D — дублировать, R / Shift+R — повернуть на ±15°, [ и ] — слой ниже/выше, стрелки — сдвиг (с Shift — крупнее), Esc — снять выделение, Ctrl+Z / Ctrl+Shift+Z — отменить / вернуть.</p>
+      <details class="keys">
+        <summary>Горячие клавиши</summary>
+        <p class="hint keys-text">Перетаскивание — мышью. Delete или Backspace — удалить, Ctrl+D — дублировать, R / Shift+R — повернуть на ±15°, [ и ] — слой ниже/выше, стрелки — сдвиг (с Shift — крупнее), Esc — снять выделение, Ctrl+Z / Ctrl+Shift+Z — отменить / вернуть.</p>
+      </details>
     </aside>
   </main>
   <script type="module" src="/src/main.ts"></script>
