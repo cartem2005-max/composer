@@ -94,7 +94,7 @@ test.describe('Форматы и раскладки', () => {
     expect(k2).toBeGreaterThan(k1);
   });
 
-  test('u021 смена формата и раскладки сбрасывает ручные положения и повороты, оттенки сохраняются', async ({ app: page }) => {
+  test('u021 смена формата и раскладки сбрасывает ручные положения, а повороты и оттенки сохраняются', async ({ app: page }) => {
     await submitNames(page, 'книга, телефон');
     const list = await items(page);
     await clickItem(page, list[0].uid);
@@ -105,7 +105,7 @@ test.describe('Форматы и раскладки', () => {
     expect(manual.rotation).toBe(15);
     await setLayout(page, 'offset');
     const after = (await items(page)).find(i => i.objectId === manual.objectId)!;
-    expect(after.rotation).toBe(0);
+    expect(after.rotation).toBe(15); // поворот сохраняется (сопоставление по объекту и виду)
     expect(after.x).not.toBeCloseTo(manual.x, 0);
     // оттенок: у книги выбран второй
     await clickItem(page, after.uid);

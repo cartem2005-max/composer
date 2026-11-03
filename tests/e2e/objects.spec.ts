@@ -14,10 +14,17 @@ test.describe('Объекты на холсте', () => {
       await expect(page.locator('#object-panel .obj-title')).toContainText(o.name);
       const list = await items(page);
       expect(list).toHaveLength(i + 1);
-      // объект появился в центре кадра (1200 x 630)
       const last = list[list.length - 1];
-      expect(last.x).toBeCloseTo(600, 0);
-      expect(last.y).toBeCloseTo(315, 0);
+      if (i === 0) {
+        // на пустом холсте — в центре кадра (1200 x 630)
+        expect(last.x).toBeCloseTo(600, 0);
+        expect(last.y).toBeCloseTo(315, 0);
+      } else {
+        // центр занят — новый объект сдвигается лесенкой, но остаётся в кадре и не ложится ровно на другой
+        expect(last.x).toBeGreaterThanOrEqual(0); expect(last.x).toBeLessThanOrEqual(1200);
+        expect(last.y).toBeGreaterThanOrEqual(0); expect(last.y).toBeLessThanOrEqual(630);
+        for (const other of list.slice(0, -1)) expect(Math.hypot(other.x - last.x, other.y - last.y), `${last.id} на ${other.id}`).toBeGreaterThan(8);
+      }
     }
     const all = await ids(page);
     expect(new Set(all).size).toBe(10);

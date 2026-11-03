@@ -277,6 +277,7 @@ export async function validateExport(page: Page, text: string, opts: { scheme?: 
   }
   if (opts.count !== undefined) expect(r.groupIds.length).toBe(opts.count);
   if (opts.scheme) {
+    expect(r.colors.length, 'в файле есть цвета (проверка не пустая)').toBeGreaterThan(0);
     const allowed = new Set(ROLES.map(k => opts.scheme![k].toUpperCase()));
     const bad = r.colors.filter(c => !allowed.has(c.toUpperCase()));
     expect(bad, `цвета не из схемы: ${bad.join(',')}`).toEqual([]);

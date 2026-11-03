@@ -26,6 +26,17 @@ async function canvasColors(page: Page) {
   });
 }
 
+/** Цвета (HEX), встречающиеся в разметке главных объектов: сюда попадают роли чёрного и белого из палитры. */
+async function mainObjectColors(page: Page) {
+  return page.evaluate(() => {
+    const out: string[] = [];
+    document.querySelectorAll('#canvas svg [data-uid][id*="-main-"]').forEach(g => {
+      (g.innerHTML.match(/#[0-9a-fA-F]{6}/g) ?? []).forEach(m => { if (!out.includes(m.toUpperCase())) out.push(m.toUpperCase()); });
+    });
+    return out;
+  });
+}
+
 test.describe('Палитры', () => {
   test('u019 JSON-палитра перекрашивает всё и сохраняется после перезагрузки', async ({ app: page, ctx }) => {
     await submitNames(page, 'книга, телефон, фоновая лампа');
@@ -34,24 +45,27 @@ test.describe('Палитры', () => {
     await expect(activeScheme(page)).toContainText('Проверочная');
     expect(await schemeButtons(page).count()).toBe(4);
     const colors = await canvasColors(page);
+    expect(colors.length).toBeGreaterThan(0);
     for (const c of colors) expect(PALETTE_COLORS, `цвет ${c} вне палитры`).toContain(c);
     await clickItem(page, (await items(page)).find(i => i.variant === 'main')!.uid);
     await panelBtn(page, 'tone').click();
     await addObject(page, 'Ручка');
     const { text } = await exportSvg(page);
-    // uniqueUids: false — известный баг дублирования data-uid после «Собрать» + добавления (см. objects.spec.ts, «БАГ uid»)
-    const r = await validateExport(page, text, { count: 4, uniqueUids: false });
+    const r = await validateExport(page, text, { count: 4 });
     for (const c of r.colors) expect(PALETTE_COLORS).toContain(c.toUpperCase());
     expect(r.bgFill).toBe('#F1F2F3');
     expect(text).toContain('Схема: Проверочная.');
-    // чёрный и белый из палитры
-    await segBtn(page, '#seg-bg', 'Чёрный').click();
-    expect((await analyzeSvg(page, (await exportSvg(page)).text)).bgFill).toBe('#101010');
+    // чёрный из палитры виден в контурах главных объектов (кнопки «Чёрный» для фона больше нет)
+    expect(await mainObjectColors(page)).toContain('#101010');
+    expect(await page.locator('#seg-bg button').allTextContents()).toEqual(['Фон 1', 'Фон 2', 'Фон 3']);
+    await segBtn(page, '#seg-bg', 'Фон 2').click();
+    expect((await analyzeSvg(page, (await exportSvg(page)).text)).bgFill).toBe('#D1D2D3');
     // перезагрузка
     await page.reload();
     await expect(schemeButtons(page)).toHaveCount(4);
     await expect(activeScheme(page)).toContainText('Проверочная');
-    expect((await analyzeSvg(page, (await exportSvg(page)).text)).bgFill).toBe('#101010');
+    expect((await analyzeSvg(page, (await exportSvg(page)).text)).bgFill).toBe('#D1D2D3');
+    expect(await mainObjectColors(page)).toContain('#101010');
     expectNoErrors(ctx);
   });
 
@@ -60,11 +74,11 @@ test.describe('Палитры', () => {
     await applyPalette(page, '#EEEEEE #CCCCCC #AAAAAA #FF0000 #00FF00 #0000FF');
     await expect(activeScheme(page)).toContainText('Своя 1');
     expect(await noticeText(page)).toContain('Палитра «Своя 1» применена');
-    expect(await page.locator('#seg-bg button').allTextContents()).toEqual(['Фон 1', 'Фон 2', 'Фон 3', 'Чёрный']);
+    expect(await page.locator('#seg-bg button').allTextContents()).toEqual(['Фон 1', 'Фон 2', 'Фон 3']);
     await segBtn(page, '#seg-bg', 'Фон 2').click();
     expect((await analyzeSvg(page, (await exportSvg(page)).text)).bgFill).toBe('#CCCCCC');
-    await segBtn(page, '#seg-bg', 'Чёрный').click();
-    expect((await analyzeSvg(page, (await exportSvg(page)).text)).bgFill).toBe('#181817');
+    // чёрный по умолчанию (#181817) — в контурах главных объектов
+    expect(await mainObjectColors(page)).toContain('#181817');
     // главный/фоновый и оттенки без undefined-цветов
     const first = (await items(page)).find(i => i.variant === 'main')!;
     await clickItem(page, first.uid);
@@ -85,12 +99,15 @@ test.describe('Палитры', () => {
   test('u041 восемь цветов дают чёрный и белый из палитры; шесть — значения по умолчанию', async ({ app: page }) => {
     await submitNames(page, 'книга, лампа');
     await applyPalette(page, '#EEEEEE #CCCCCC #AAAAAA #FF0000 #00FF00 #0000FF #121212 #FAFAFA');
-    await segBtn(page, '#seg-bg', 'Чёрный').click();
-    expect((await analyzeSvg(page, (await exportSvg(page)).text)).bgFill).toBe('#121212');
+    const eight = await mainObjectColors(page);
+    expect(eight).toContain('#121212');
+    expect(eight).not.toContain('#181817');
     await applyPalette(page, '#EEEEEE #CCCCCC #AAAAAA #FF0000 #00FF00 #0000FF');
-    await segBtn(page, '#seg-bg', 'Чёрный').click();
-    // цвета предыдущей палитры не протекают
-    expect((await analyzeSvg(page, (await exportSvg(page)).text)).bgFill).toBe('#181817');
+    // цвета предыдущей палитры не протекают: чёрный снова по умолчанию
+    const six = await mainObjectColors(page);
+    expect(six).toContain('#181817');
+    expect(six).not.toContain('#121212');
+    expect(six).not.toContain('#FAFAFA');
   });
 
   test('u041 палитры, различающиеся только последними цветами, не затирают друг друга', async ({ app: page }) => {
