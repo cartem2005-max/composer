@@ -1,4 +1,4 @@
-import { library, getObject, paint, shapeSet, distinctTones } from './library';
+import { library, baseSize, getObject, paint, shapeSet, distinctTones } from './library';
 import { autoLayout, LAYOUTS } from './layout';
 import { pickByNames, pickWithAI } from './match/pick';
 import { compositionSvg, FORMATS, instanceTransform, layerId } from './render';
@@ -34,17 +34,24 @@ function initialComposition(): Composition {
   return applyPicks(base, pickByNames('наушники, фоновые тюльпаны').picks);
 }
 
-/** tones — цвета объектов по ключу «объект:вид»: раскладка меняет порядок слоёв, поэтому сопоставляем не по номеру. */
-function applyPicks(c: Composition, picks: Pick[], tones: Map<string, number[]> = new Map()): Composition {
+/** Цвета и повороты объектов по ключу «объект:вид» — при пересборке раскладки ручные правки цвета и поворота сохраняются. */
+type Kept = { tone: number; rotation: number };
+function applyPicks(c: Composition, picks: Pick[], tones: Map<string, Kept[]> = new Map()): Composition {
   const { scale, items } = autoLayout(picks, c.format, c.layout, c.size, c.seed ?? 0);
   const left = new Map([...tones].map(([k, v]) => [k, [...v]]));
   let uid = 1;
-  return { ...c, scale, items: items.map(it => ({ ...it, tone: left.get(`${it.objectId}:${it.variant}`)?.shift() ?? 0, uid: uid++ })) };
+  return {
+    ...c, scale,
+    items: items.map(it => {
+      const kept = left.get(`${it.objectId}:${it.variant}`)?.shift();
+      return { ...it, tone: kept?.tone ?? 0, rotation: kept?.rotation ?? 0, uid: uid++ };
+    }),
+  };
 }
 
 function tonesOf(c: Composition) {
-  const map = new Map<string, number[]>();
-  for (const it of c.items) { const k = `${it.objectId}:${it.variant}`; map.set(k, [...(map.get(k) ?? []), it.tone]); }
+  const map = new Map<string, Kept[]>();
+  for (const it of c.items) { const k = `${it.objectId}:${it.variant}`; map.set(k, [...(map.get(k) ?? []), { tone: it.tone, rotation: it.rotation }]); }
   return map;
 }
 
@@ -122,8 +129,21 @@ canvasEl.addEventListener('pointercancel', endDrag);
 const actions = {
   add(objectId: Pick['id'], variant: Pick['variant']) {
     const f = FORMATS[store.state.format];
-    const item = store.withUid({ objectId, variant, tone: 0, x: f.w / 2, y: f.h / 2, rotation: 0 });
-    store.update(c => { variant === 'bg' ? c.items.unshift(item) : c.items.push(item); });
+    // Новый объект — в центр кадра; если там уже стоит другой, сдвигаем лесенкой, чтобы объекты не легли друг на друга.
+    let x = f.w / 2, y = f.h / 2;
+    for (let step = 0; step < 12 && store.state.items.some(i => Math.abs(i.x - x) < 8 && Math.abs(i.y - y) < 8); step++) {
+      x = clamp(x + f.w * 0.06, 0, f.w); y = clamp(y + f.h * 0.06, 0, f.h);
+    }
+    const item = store.withUid({ objectId, variant, tone: 0, x, y, rotation: 0 });
+    store.update(c => {
+      // На пустом холсте подбираем общий масштаб так, чтобы объект занял около 60 % короткой стороны кадра.
+      // Если на холсте уже есть объекты, масштаб не трогаем: он общий, иначе нарушатся пропорции между объектами.
+      if (!c.items.length) {
+        const { w, h } = baseSize(objectId, c.size, variant);
+        c.scale = Math.min(f.w / w, f.h / h) * 0.6;
+      }
+      variant === 'bg' ? c.items.unshift(item) : c.items.push(item);
+    });
     store.select(item.uid);
   },
   duplicate() {

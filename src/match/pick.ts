@@ -199,9 +199,22 @@ export function pickByNames(text: string): PickResult {
     }
   }
   const excluded = (id: ObjectId) => hard.has(id) || (soft.has(id) && !positive.has(id));
-  const clean = sanitizePicks(picks.filter(p => !excluded(p.id)));
+  const wanted = picks.filter(p => !excluded(p.id));
+  const clean = sanitizePicks(wanted);
+  // Честно объясняем, что изменили правила композиции: лимит объектов и «хотя бы один главный».
+  const notes: string[] = [];
+  const distinct = new Set(wanted.map(p => p.id)).size;
+  if (distinct > clean.length) notes.push(`Показаны первые ${clean.length} из ${distinct}: в одной композиции до ${clean.length} объектов.`);
+  if (wanted.length && wanted.every(p => p.variant === 'bg') && clean.some(p => p.variant === 'main'))
+    notes.push('Первый объект сделан главным: в композиции нужен хотя бы один главный.');
+  if (clean.filter(p => p.variant === 'bg').length > wanted.filter(p => p.variant === 'bg').length && !notes.length)
+    notes.push('Четвёртый и следующие главные объекты стали фоновыми: главных в композиции не больше трёх.');
+  // «две книги», «книга, книга» — копии не создаются: каждый объект берётся один раз.
+  const repeated = wanted.length > distinct || /(^|[s,])(d+|два|две|три|четыре|пять|шесть|несколько|много)s/i.test(raw);
+  if (repeated) notes.push('Каждый объект добавлен один раз — копии делает кнопка «Дублировать» (Ctrl+D).');
+  if (unknown.length) notes.push(`Не нашлось в библиотеке: ${unknown.join(', ')}.`);
   const reason = clean.length
-    ? unknown.length ? `Не нашлось в библиотеке: ${unknown.join(', ')}.` : 'Все компоненты найдены.'
+    ? notes.join(' ') || 'Все компоненты найдены.'
     : 'Таких объектов в библиотеке нет. Доступны: ' + CATALOG.map(c => c.name.toLowerCase()).join(', ') + '.';
   return { picks: clean, source: 'dictionary', reason };
 }
