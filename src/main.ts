@@ -73,6 +73,7 @@ function renderCanvas() {
   svgEl.setAttribute('aria-label', 'Композиция');
   const f = FORMATS[c.format];
   canvasEl.style.aspectRatio = `${f.w} / ${f.h}`;
+  fitCanvas();
   const sel = store.selectedItem;
   if (sel) {
     const { w, h } = shapeSet(sel.objectId, c.size, sel.variant);
@@ -83,6 +84,27 @@ function renderCanvas() {
     svgEl.appendChild(ui);
   }
 }
+
+/**
+ * Размер кадра в пикселях: вписываем формат в свободное место. Без явного размера Safari (и браузер
+ * внутри Telegram на iPhone) считает ширину SVG с одним viewBox нулевой — холст пропадает.
+ * На узком экране высота не ограничена родителем, поэтому берём 70 % высоты окна.
+ */
+const canvasWrap = $('canvas-wrap');
+function fitCanvas() {
+  if (!svgEl) return;
+  const f = FORMATS[store.state.format];
+  const cs = getComputedStyle(canvasWrap);
+  const padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+  const padY = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+  const w = canvasWrap.clientWidth - padX;
+  const h = matchMedia('(max-width: 1000px)').matches ? window.innerHeight * 0.7 : canvasWrap.clientHeight - padY;
+  const k = Math.max(0, Math.min(w / f.w, h / f.h));
+  svgEl.style.width = `${Math.floor(f.w * k)}px`;
+  svgEl.style.height = `${Math.floor(f.h * k)}px`;
+}
+new ResizeObserver(fitCanvas).observe(canvasWrap);
+window.addEventListener('resize', fitCanvas);
 
 function svgPoint(e: PointerEvent) {
   const ctm = svgEl!.getScreenCTM()!.inverse();
